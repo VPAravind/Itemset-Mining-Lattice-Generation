@@ -1,0 +1,36 @@
+
+
+------- Join of Movie, Movie_genre and Genre tables where runtime >= 90 ----------
+
+Create table Movie_genre_relation as ( select distinct m.id as movieId, type, startYear, runtime, avgRating, 
+    									    g.id as genreId, g.name as genre 
+    									   from movie as m 
+     									   inner join movie_genre as mg on m.id = mg.movie inner join genre as g on 
+     									   g.id = mg.genre where  m.runtime >= 90 );
+
+
+------- Join of the previously created movie_genre_relation table, movie_actor and actor table ----------
+									   
+Create table Movie_genre_actor as ( select distinct m.movieId, type, startYear, runtime, avgRating, genreId, 
+       								   	  genre, me.id as memberId, me.birthYear 
+        								   	  from movie_genre_relation as m 
+        									  inner join movie_actor as ma on m.movieId = ma.movie 
+ 										  inner join member as me on 
+ 										  me.id = ma.actor );
+
+------- Join of the previously created movie_genre_actor table and actor_movie_role ---------
+
+Create table Movie_genre_actor_role as ( select distinct movieId, type, startYear, runtime, avgRating, genreId, 
+    								   	  genre, memberId, birthYear, role 
+     								   	  from movie_genre_actor
+  								      inner join actor_movie_role on movieId = movie and memberId = actor);
+
+
+------- Delete the rows where an actor has played more than 1 role in a given table --------
+
+Delete from movie_genre_actor_role where (movieId) in (Select movieId from movie_genre_actor_role group by movieId, memberId, genreId
+ 									     having count(memberId) > 1);
+
+------- Set the primary key of the relation ---------
+
+Alter table movie_genre_actor_role add primary key(movieId, genreId,memberId);
