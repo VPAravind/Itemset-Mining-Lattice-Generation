@@ -8,4 +8,4 @@ required to normalize the dataset.
 
 Read report: Itemset-mining-lattice-generation.pdf
 
-Implementation of the apiori algorithm without pruning, on the IMDB dataset where a new SQL table is created for each lattice level. The actors are considered to be items for itemset mining while the transactions are the movies in which actors have occured together. 
+Implementation of the apiori algorithm without pruning, on the IMDB dataset where a new SQL table is created for each lattice level. The actors are considered to be items for itemset mining while the transactions are the movies in which actors have worked together. 
